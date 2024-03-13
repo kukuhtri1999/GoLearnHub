@@ -2,19 +2,18 @@
 package routes
 
 import (
+	"golearnhub/controllers"
+
 	"github.com/gin-gonic/gin"
-	"github.com/kukuhtri1999/GoLearnHub/controllers" // Update with your project's import path
+	"gorm.io/gorm"
 )
 
-// SetUserRoutes defines user-related routes
-func SetUserRoutes(router *gin.Engine) {
-	userController := controllers.UserController{}
-
-	// Group user routes under "/user"
-	userRoutes := router.Group("/user")
+// RegisterUserRoutes registers user-related routes
+func RegisterUserRoutes(router *gin.Engine, db *gorm.DB) {
+	userGroup := router.Group("/users")
 	{
-		userRoutes.POST("/register", userController.Register)
-		userRoutes.POST("/login", userController.Login)
-		userRoutes.GET("/profile", userController.GetUserProfile)
+		userGroup.POST("/register", func(c *gin.Context) {
+			controllers.RegisterUser(c, db)
+		})
 	}
 }

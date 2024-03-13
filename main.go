@@ -6,6 +6,10 @@ import (
 	"net/http"
 	"os"
 
+	_ "golearnhub/docs"
+	"golearnhub/models"
+	"golearnhub/routes"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	swaggerFiles "github.com/swaggo/files"     // Import swaggerFiles
@@ -35,6 +39,9 @@ func main() {
 	// Swagger documentation endpoint
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	// Register user routes
+	routes.RegisterUserRoutes(router, db)
+
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Welcome to GoLearnHub!"})
 	})
@@ -58,6 +65,9 @@ func initDB() {
 	}
 
 	fmt.Println("Database connected successfully!")
+
+	// Auto Migrate the database models
+	db.AutoMigrate(&models.User{}, &models.Course{}, &models.Lecture{}, &models.Quiz{}, &models.UserCourseProgress{})
 }
 
 func loadEnv() error {

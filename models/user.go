@@ -8,12 +8,12 @@ import (
 )
 
 type User struct {
-	ID        uint   `gorm:"primaryKey" json:"userID"`
-	Username  string `json:"username"`
-	Email     string `json:"email"`
-	Password  string `json:"-"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	UserID    uint      `gorm:"primaryKey;autoIncrement" json:"-"`
+	Username  string    `json:"username" binding:"required"`
+	Email     string    `json:"email" binding:"required,email"`
+	Password  string    `json:"password" binding:"required,min=8"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"-"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"-"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

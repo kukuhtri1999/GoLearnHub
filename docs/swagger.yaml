@@ -1,9 +1,51 @@
 basePath: /
+definitions:
+  models.User:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: API for GoLearnHub online learning platform
   title: GoLearnHub API
   version: "1.0"
-paths: {}
+paths:
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User information for registration
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User registered successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "409":
+          description: Email already exists
+          schema:
+            type: string
+      summary: Register a new user
 swagger: "2.0"
